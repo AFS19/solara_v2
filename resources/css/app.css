@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 
 @import 'tw-animate-css';
@@ -12,6 +13,8 @@
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
+
+    --font-display: 'Playfair Display', ui-serif, Georgia, serif;
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -59,6 +62,41 @@
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
+
+    --color-cream: #FDF6EC;
+    --color-sand: #F5E6C8;
+    --color-charcoal: #2C2C2C;
+    --color-gold: #C9A84C;
+    --color-coral: #E8734A;
+    --color-mutedtone: #8A8A8A;
+}
+
+@keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@utility animate-fade-up {
+    animation: fade-up 0.6s ease-out forwards;
+}
+
+@utility animate-rotate-slow {
+    animation: rotate-slow 60s linear infinite;
+}
+
+@utility btn-press {
+    transition: transform 0.1s ease;
+}
+
+@utility btn-press-active {
+    &:active {
+        transform: scale(0.96);
+    }
 }
 
 :root {
@@ -135,6 +173,10 @@
 @layer base {
     * {
         @apply border-border;
+    }
+
+    html, body {
+        @apply overflow-x-hidden;
     }
 
     body {
