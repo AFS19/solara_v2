@@ -31,6 +31,7 @@ return [
         ],
         'add' => 'Ajouter au panier',
         'view3d' => 'Vue 3D',
+        'empty' => 'Aucun produit en vedette pour le moment.',
     ],
     'spf' => [
         'label' => 'Le guide essentiel',

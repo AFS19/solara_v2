@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/produits', [ProductController::class, 'index'])->name('products.index');
+Route::get('/produits/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 
 Route::prefix('{current_team}')
     ->middleware(['auth', 'verified', EnsureTeamMembership::class])

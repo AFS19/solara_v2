@@ -117,3 +117,18 @@ it('returns empty when no products match filters', function () {
         ->has('products.data', 0)
     );
 });
+
+it('shows a single product page', function () {
+    $category = Category::factory()->create();
+    $product = Product::factory()->create(['category_id' => $category->id, 'price' => 99.90]);
+
+    $response = $this->get("/produits/{$product->slug}");
+
+    $response->assertOk()
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('Products/Show')
+            ->where('product.id', $product->id)
+            ->where('priceFormatted', '99,90 MAD')
+            ->where('model3dUrl', null)
+        );
+});

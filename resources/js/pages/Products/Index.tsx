@@ -47,6 +47,7 @@ interface PageProps {
   categories: Category[];
   spfOptions: (number | null)[];
   filters: Filters;
+  [key: string]: unknown;
 }
 
 export default function ProductsIndex() {
@@ -199,39 +200,44 @@ export default function ProductsIndex() {
                     key={product.id}
                     className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                   >
-                    <div className="relative aspect-square bg-cream overflow-hidden">
-                      <img
-                        src={productImage(product)}
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      {product.featured && (
-                        <span className="absolute top-3 left-3 text-[11px] font-medium px-3 py-1 rounded-full bg-gold text-white">
-                          Featured
-                        </span>
-                      )}
-                      <button
-                        aria-label="Wishlist"
-                        className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center text-charcoal hover:text-coral transition-colors"
-                      >
-                        <Heart size={16} />
-                      </button>
-                    </div>
-
-                    <div className="p-5">
-                      <div className="flex items-start justify-between gap-2">
-                        <h3 className="font-display text-[18px] text-charcoal">{product.name}</h3>
-                        {product.spf && (
-                          <span className="shrink-0 bg-sand text-charcoal text-[11px] px-2 py-0.5 rounded-full">
-                            SPF {product.spf}
+                    <Link href={`/produits/${product.slug}`} className="block">
+                      <div className="relative aspect-square bg-cream overflow-hidden">
+                        <img
+                          src={productImage(product)}
+                          alt={product.name}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                        {product.featured && (
+                          <span className="absolute top-3 left-3 text-[11px] font-medium px-3 py-1 rounded-full bg-gold text-white">
+                            Featured
                           </span>
                         )}
+                        <button
+                          aria-label="Wishlist"
+                          className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center text-charcoal hover:text-coral transition-colors"
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          <Heart size={16} />
+                        </button>
                       </div>
+                    </Link>
+
+                    <div className="p-5">
+                      <Link href={`/produits/${product.slug}`} className="block">
+                        <div className="flex items-start justify-between gap-2">
+                          <h3 className="font-display text-[18px] text-charcoal">{product.name}</h3>
+                          {product.spf && (
+                            <span className="shrink-0 bg-sand text-charcoal text-[11px] px-2 py-0.5 rounded-full">
+                              SPF {product.spf}
+                            </span>
+                          )}
+                        </div>
+                      </Link>
                       <p className="mt-1 text-[13px] text-mutedtone line-clamp-2">{product.description || ''}</p>
 
                       <div className="mt-3 flex items-center justify-between">
-                        <span className="text-gold font-semibold text-[20px]">{product.price} €</span>
+                        <span className="text-gold font-semibold text-[20px]">{product.price} MAD</span>
                         <div className="flex items-center gap-1 text-mutedtone text-xs">
                           <Star size={14} className="fill-gold text-gold" />
                           <span>4.5</span>

@@ -8,12 +8,12 @@ import { AboutBrand } from "./AboutBrand";
 import { FaqSection } from "./FaqSection";
 import { Newsletter } from "./Newsletter";
 
-export function App() {
+export function App({ featuredProducts }: { featuredProducts?: any[] }) {
   return (
     <main>
       <HeroSection />
       <UspBar />
-      <ProductsGrid />
+      <ProductsGrid products={featuredProducts} />
       <SpfGuide />
       <HowItWorks />
       <Testimonials />

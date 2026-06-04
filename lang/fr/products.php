@@ -32,4 +32,12 @@ return [
         'view' => 'Voir le produit',
         'add' => 'Ajouter au panier',
     ],
+    'show' => [
+        'back' => 'Retour aux produits',
+        'add_to_cart' => 'Ajouter au panier',
+        'no_3d_model' => 'Aucun modèle 3D disponible',
+        'description' => 'Description',
+        'spf_label' => 'Protection solaire',
+        'category_label' => 'Catégorie',
+    ],
 ];

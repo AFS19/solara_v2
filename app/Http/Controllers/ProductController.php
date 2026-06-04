@@ -61,4 +61,16 @@ class ProductController extends Controller
             ],
         ]);
     }
+
+    public function show(Product $product)
+    {
+        $product->load(['category', 'media']);
+
+        return Inertia::render('Products/Show', [
+            'product' => $product,
+            'priceFormatted' => number_format($product->price, 2, ',', ' ').' MAD',
+            'model3dUrl' => $product->has_3d_model ? $product->getFirstMediaUrl('model_3d') : null,
+            'firstImageUrl' => $product->getFirstMediaUrl('images'),
+        ]);
+    }
 }
