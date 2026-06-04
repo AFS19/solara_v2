@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,6 +33,9 @@ class Order extends Model
     {
         return [
             'total' => 'decimal:2',
+            'status' => OrderStatus::class,
+            'payment_status' => PaymentStatus::class,
+            'payment_method' => PaymentMethod::class,
         ];
     }
 
