@@ -1,7 +1,29 @@
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Sun } from "lucide-react";
 import { t } from "@/lib/i18n";
 
-export function HeroSection() {
+const HeroCanvas = lazy(() => import("@/components/HeroCanvas"));
+
+function Fallback() {
+  return (
+    <div className="absolute inset-8 rounded-3xl bg-sand flex flex-col items-center justify-center text-mutedtone shadow-inner">
+      <Sun size={56} className="text-gold mb-3" />
+      <span className="text-sm">[Modèle 3D ici]</span>
+    </div>
+  );
+}
+
+interface HeroSectionProps {
+  has3dModel?: boolean;
+}
+
+export function HeroSection({ has3dModel = true }: HeroSectionProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <section
       id="hero"
@@ -47,14 +69,15 @@ export function HeroSection() {
           <div className="relative w-[min(480px,90vw)] aspect-square">
             <div className="absolute inset-0 rounded-full border-2 border-dashed border-gold/40 animate-rotate-slow" />
             <div className="absolute inset-4 rounded-full border border-coral/20 animate-rotate-slow" style={{ animationDirection: "reverse", animationDuration: "40s" }} />
-            <div
-              id="hero-3d-canvas"
-              data-placeholder="true"
-              className="absolute inset-8 rounded-3xl bg-sand flex flex-col items-center justify-center text-mutedtone shadow-inner"
-            >
-              <Sun size={56} className="text-gold mb-3" />
-              <span className="text-sm">[Modèle 3D ici]</span>
-            </div>
+            {mounted && has3dModel ? (
+              <div className="absolute inset-8 rounded-3xl overflow-hidden">
+                <Suspense fallback={<Fallback />}>
+                  <HeroCanvas />
+                </Suspense>
+              </div>
+            ) : (
+              <Fallback />
+            )}
           </div>
         </div>
       </div>
