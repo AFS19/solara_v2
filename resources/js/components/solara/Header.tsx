@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
+import { Link } from '@inertiajs/react';
 import { Menu, ShoppingBag, X } from "lucide-react";
 import { t } from "@/lib/i18n";
+import { home } from '@/routes';
+import products from '@/routes/products';
 
 const links = [
-  { key: "nav.home", href: "#hero" },
-  { key: "nav.products", href: "#products" },
-  { key: "nav.guide", href: "#spf-guide" },
-  { key: "nav.about", href: "#about" },
-  { key: "nav.contact", href: "#newsletter" },
+  { key: "nav.home", href: home.url() },
+  { key: "nav.products", href: products.index.url() },
+  { key: "nav.guide", href: home.url() + '#spf-guide' },
+  { key: "nav.about", href: home.url() + '#about' },
+  { key: "nav.contact", href: home.url() + '#newsletter' },
 ];
 
 export function Header() {
@@ -38,19 +41,19 @@ export function Header() {
       style={{ height: 64 }}
     >
       <div className="max-w-[1280px] mx-auto h-full px-6 flex items-center justify-between">
-        <a href="#hero" className="font-display text-[24px] text-gold font-bold tracking-tight">
+        <Link href={home.url()} className="font-display text-[24px] text-gold font-bold tracking-tight">
           SOLARA
-        </a>
+        </Link>
 
         <nav className="hidden lg:flex items-center gap-8">
           {links.map((l) => (
-            <a
+            <Link
               key={l.key}
               href={l.href}
               className="text-sm text-charcoal hover:text-coral transition-colors"
             >
               {t(l.key)}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -76,12 +79,12 @@ export function Header() {
             </span>
           </button>
 
-          <a
-            href="#products"
+          <Link
+            href={products.index.url()}
             className="hidden sm:inline-flex bg-gold text-white px-5 py-2 rounded-full text-sm font-medium btn-press btn-press-active hover:bg-gold/90"
           >
             {t("nav.shop")}
-          </a>
+          </Link>
 
           <button
             className="lg:hidden p-2 text-charcoal"
@@ -105,14 +108,14 @@ export function Header() {
             </div>
             <nav className="flex flex-col gap-4">
               {links.map((l) => (
-                <a
+                <Link
                   key={l.key}
                   href={l.href}
                   onClick={() => setOpen(false)}
                   className="text-charcoal text-base"
                 >
                   {t(l.key)}
-                </a>
+                </Link>
               ))}
             </nav>
           </div>

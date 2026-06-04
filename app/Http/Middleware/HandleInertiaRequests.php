@@ -41,7 +41,10 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'locale' => app()->getLocale(),
-            'translations' => fn () => Arr::dot(trans('home', [], 'fr')),
+            'translations' => fn () => array_merge(
+                Arr::dot(trans('home', [], 'fr')),
+                Arr::dot(trans('products', [], 'fr')),
+            ),
             'name' => config('app.name'),
             'auth' => [
                 'user' => $user,
