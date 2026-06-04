@@ -24,5 +24,9 @@ class DatabaseSeeder extends Seeder
         Category::factory(5)
             ->has(Product::factory()->count(4))
             ->create();
+
+        $this->call([
+            ReviewSeeder::class,
+        ]);
     }
 }

@@ -48,6 +48,7 @@ class HandleInertiaRequests extends Middleware
                 Arr::dot(trans('products', [], 'fr')),
                 Arr::dot(['cart' => trans('cart', [], 'fr')]),
                 Arr::dot(['checkout' => trans('checkout', [], 'fr')]),
+                Arr::dot(['reviews' => trans('reviews', [], 'fr')]),
             ),
             'name' => config('app.name'),
             'auth' => [

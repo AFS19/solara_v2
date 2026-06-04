@@ -1,7 +1,7 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { t } from '@/lib/i18n';
 import { Suspense, lazy } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Star } from 'lucide-react';
 import { toast } from 'sonner';
 
 const ProductViewer3D = lazy(() => import('@/components/ProductViewer3D'));
@@ -16,6 +16,21 @@ interface Media {
   id: number;
   collection_name: string;
   original_url: string;
+}
+
+interface ReviewUser {
+  id: number;
+  name: string;
+}
+
+interface Review {
+  id: number;
+  name: string;
+  email: string;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+  user: ReviewUser | null;
 }
 
 interface Product {
@@ -36,13 +51,57 @@ interface PageProps {
   priceFormatted: string;
   model3dUrl: string | null;
   firstImageUrl: string;
+  reviews: Review[];
+  averageRating: number | null;
+  reviewsCount: number;
+  auth: {
+    user: ReviewUser | null;
+  };
   [key: string]: unknown;
 }
 
+function StarRating({ rating }: { rating: number }) {
+  return (
+    <div className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <Star
+          key={star}
+          size={16}
+          className={
+            star <= rating
+              ? 'text-gold fill-gold'
+              : 'text-gray-300 fill-gray-300'
+          }
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function ProductsShow() {
-  const { product, priceFormatted, model3dUrl, firstImageUrl } = usePage<PageProps>().props;
+  const { product, priceFormatted, model3dUrl, firstImageUrl, reviews, averageRating, reviewsCount, auth } =
+    usePage<PageProps>().props;
 
   const fallbackImage = firstImageUrl || 'https://placehold.co/600x600/FDF6EC/C9A84C?text=Produit';
+
+  const { data, setData, post, processing, errors, recentlySuccessful, reset } =
+    useForm({
+      rating: 5,
+      comment: '',
+      name: auth.user?.name ?? '',
+      email: auth.user?.email ?? '',
+    });
+
+  const submitReview = (e: React.FormEvent) => {
+    e.preventDefault();
+    post(`/produits/${product.slug}/reviews`, {
+      preserveScroll: true,
+      onSuccess: () => {
+        toast.success(t('reviews.success'));
+        reset();
+      },
+    });
+  };
 
   return (
     <main className="pt-[64px]">
@@ -89,6 +148,15 @@ export default function ProductsShow() {
                 )}
               </div>
 
+              {averageRating !== null && (
+                <div className="mt-3 flex items-center gap-2">
+                  <StarRating rating={Math.round(averageRating)} />
+                  <span className="text-sm text-mutedtone">
+                    {t('show.reviews_count').replace(':count', String(reviewsCount))}
+                  </span>
+                </div>
+              )}
+
               <div className="mt-6 space-y-4 text-mutedtone">
                 <p>{product.description || ''}</p>
               </div>
@@ -118,6 +186,131 @@ export default function ProductsShow() {
                 {t('show.add_to_cart')}
               </button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews */}
+      <section className="py-12 bg-cream">
+        <div className="max-w-[1280px] mx-auto px-6">
+          <h2 className="text-2xl font-display text-charcoal mb-8">
+            {t('show.reviews_title')}
+          </h2>
+
+          {reviews.length === 0 ? (
+            <p className="text-mutedtone">{t('show.no_reviews')}</p>
+          ) : (
+            <div className="space-y-6">
+              {reviews.map((review) => (
+                <div key={review.id} className="bg-white rounded-xl p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-medium text-charcoal">
+                        {review.user?.name ?? review.name}
+                      </span>
+                      <StarRating rating={review.rating} />
+                    </div>
+                    <span className="text-xs text-mutedtone">
+                      {new Date(review.created_at).toLocaleDateString('fr-FR')}
+                    </span>
+                  </div>
+                  {review.comment && (
+                    <p className="mt-3 text-sm text-mutedtone">{review.comment}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="mt-10 bg-white rounded-xl p-6">
+            <h3 className="text-lg font-medium text-charcoal mb-4">
+              {t('show.write_review')}
+            </h3>
+
+            {recentlySuccessful ? (
+              <p className="text-sm text-green-600">{t('reviews.success')}</p>
+            ) : (
+              <form onSubmit={submitReview} className="space-y-4">
+                <div>
+                  <label className="block text-sm text-mutedtone mb-1">
+                    {t('show.your_rating')}
+                  </label>
+                  <select
+                    value={data.rating}
+                    onChange={(e) => setData('rating', Number(e.target.value))}
+                    required
+                    className="w-full border border-sand rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gold/50"
+                  >
+                    {[5, 4, 3, 2, 1].map((n) => (
+                      <option key={n} value={n}>
+                        {n} / 5
+                      </option>
+                    ))}
+                  </select>
+                  {errors.rating && (
+                    <p className="mt-1 text-xs text-red-500">{errors.rating}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm text-mutedtone mb-1">
+                    {t('show.your_comment')}
+                  </label>
+                  <textarea
+                    value={data.comment}
+                    onChange={(e) => setData('comment', e.target.value)}
+                    rows={4}
+                    required
+                    className="w-full border border-sand rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gold/50"
+                  />
+                  {errors.comment && (
+                    <p className="mt-1 text-xs text-red-500">{errors.comment}</p>
+                  )}
+                </div>
+
+                {!auth.user && (
+                  <>
+                    <div>
+                      <label className="block text-sm text-mutedtone mb-1">
+                        {t('show.your_name')}
+                      </label>
+                      <input
+                        type="text"
+                        value={data.name}
+                        onChange={(e) => setData('name', e.target.value)}
+                        className="w-full border border-sand rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gold/50"
+                      />
+                      {errors.name && (
+                        <p className="mt-1 text-xs text-red-500">{errors.name}</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm text-mutedtone mb-1">
+                        {t('show.your_email')}
+                      </label>
+                      <input
+                        type="email"
+                        value={data.email}
+                        onChange={(e) => setData('email', e.target.value)}
+                        className="w-full border border-sand rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gold/50"
+                      />
+                      {errors.email && (
+                        <p className="mt-1 text-xs text-red-500">{errors.email}</p>
+                      )}
+                    </div>
+                  </>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={processing}
+                  className="bg-charcoal text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-charcoal/90 disabled:opacity-50"
+                >
+                  {t('show.submit_review')}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </section>

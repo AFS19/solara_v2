@@ -66,11 +66,19 @@ class ProductController extends Controller
     {
         $product->load(['category', 'media']);
 
+        $approvedReviews = $product->approvedReviews()
+            ->with('user')
+            ->latest()
+            ->get();
+
         return Inertia::render('Products/Show', [
             'product' => $product,
             'priceFormatted' => number_format($product->price, 2, ',', ' ').' MAD',
             'model3dUrl' => $product->has_3d_model ? $product->getFirstMediaUrl('model_3d') : null,
             'firstImageUrl' => $product->getFirstMediaUrl('images'),
+            'reviews' => $approvedReviews,
+            'averageRating' => $product->averageRating(),
+            'reviewsCount' => $approvedReviews->count(),
         ]);
     }
 }
