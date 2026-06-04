@@ -3,6 +3,7 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Middleware\EnsureTeamMembership;
@@ -20,6 +21,8 @@ Route::delete('/panier/{product:slug}', [CartController::class, 'remove'])->name
 Route::get('/commande', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/commande', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('/commande/merci/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
+
+Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
 Route::prefix('{current_team}')
     ->middleware(['auth', 'verified', EnsureTeamMembership::class])
