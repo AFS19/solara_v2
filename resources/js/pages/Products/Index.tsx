@@ -1,4 +1,5 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
+import { toast } from 'sonner';
 import { t } from '@/lib/i18n';
 import { Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -245,7 +246,15 @@ export default function ProductsIndex() {
                         </div>
                       </div>
 
-                      <button className="mt-4 w-full bg-coral text-white py-2.5 rounded-full text-sm font-medium hover:bg-coral/90 btn-press btn-press-active">
+                      <button
+                        onClick={() => {
+                          router.post('/panier/ajouter', { product_id: product.id, quantity: 1 }, {
+                            preserveScroll: true,
+                            onSuccess: () => toast.success(t('cart.added')),
+                          });
+                        }}
+                        className="mt-4 w-full bg-coral text-white py-2.5 rounded-full text-sm font-medium hover:bg-coral/90 btn-press btn-press-active"
+                      >
                         {t('card.add')}
                       </button>
                     </div>

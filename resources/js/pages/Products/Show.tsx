@@ -1,7 +1,8 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { t } from '@/lib/i18n';
 import { Suspense, lazy } from 'react';
 import { ArrowLeft } from 'lucide-react';
+import { toast } from 'sonner';
 
 const ProductViewer3D = lazy(() => import('@/components/ProductViewer3D'));
 
@@ -105,7 +106,15 @@ export default function ProductsShow() {
                 )}
               </div>
 
-              <button className="mt-10 w-full bg-coral text-white py-3 rounded-full text-sm font-medium hover:bg-coral/90 btn-press btn-press-active">
+              <button
+                onClick={() => {
+                  router.post('/panier/ajouter', { product_id: product.id, quantity: 1 }, {
+                    preserveScroll: true,
+                    onSuccess: () => toast.success(t('cart.added')),
+                  });
+                }}
+                className="mt-10 w-full bg-coral text-white py-3 rounded-full text-sm font-medium hover:bg-coral/90 btn-press btn-press-active"
+              >
                 {t('show.add_to_cart')}
               </button>
             </div>

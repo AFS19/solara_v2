@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Inertia\Middleware;
@@ -41,9 +42,12 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'locale' => app()->getLocale(),
+            'cartCount' => fn () => app(CartService::class)->count(),
             'translations' => fn () => array_merge(
                 Arr::dot(trans('home', [], 'fr')),
                 Arr::dot(trans('products', [], 'fr')),
+                Arr::dot(['cart' => trans('cart', [], 'fr')]),
+                Arr::dot(['checkout' => trans('checkout', [], 'fr')]),
             ),
             'name' => config('app.name'),
             'auth' => [

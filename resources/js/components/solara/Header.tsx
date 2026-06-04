@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { Menu, ShoppingBag, X } from "lucide-react";
 import { t } from "@/lib/i18n";
 import { home } from '@/routes';
@@ -14,6 +14,7 @@ const links = [
 ];
 
 export function Header() {
+  const { cartCount } = usePage<{ cartCount: number }>().props;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [lang, setLang] = useState<"FR" | "AR" | "EN">("FR");
@@ -72,12 +73,14 @@ export function Header() {
             ))}
           </div>
 
-          <button className="relative p-2 text-charcoal hover:text-coral transition-colors">
+          <Link href="/panier" className="relative p-2 text-charcoal hover:text-coral transition-colors">
             <ShoppingBag size={20} />
-            <span className="absolute -top-0.5 -right-0.5 bg-coral text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
-              2
-            </span>
-          </button>
+            {cartCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 bg-coral text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </Link>
 
           <Link
             href={products.index.url()}
