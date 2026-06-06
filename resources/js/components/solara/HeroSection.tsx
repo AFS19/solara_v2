@@ -13,11 +13,15 @@ function Fallback() {
   );
 }
 
-interface HeroSectionProps {
-  has3dModel?: boolean;
+function is3DModel(url: string): boolean {
+  return /\.(glb|gltf)(\?.*)?$/i.test(url);
 }
 
-export function HeroSection({ has3dModel = true }: HeroSectionProps) {
+interface HeroSectionProps {
+  heroUrl?: string | null;
+}
+
+export function HeroSection({ heroUrl }: HeroSectionProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -69,11 +73,19 @@ export function HeroSection({ has3dModel = true }: HeroSectionProps) {
           <div className="relative w-[min(480px,90vw)] aspect-square">
             <div className="absolute inset-0 rounded-full border-2 border-dashed border-gold/40 animate-rotate-slow" />
             <div className="absolute inset-4 rounded-full border border-coral/20 animate-rotate-slow" style={{ animationDirection: "reverse", animationDuration: "40s" }} />
-            {mounted && has3dModel ? (
+            {mounted && heroUrl ? (
               <div className="absolute inset-8 rounded-3xl overflow-hidden">
-                <Suspense fallback={<Fallback />}>
-                  <HeroCanvas />
-                </Suspense>
+                {is3DModel(heroUrl) ? (
+                  <Suspense fallback={<Fallback />}>
+                    <HeroCanvas url={heroUrl} />
+                  </Suspense>
+                ) : (
+                  <img
+                    src={heroUrl}
+                    alt="Hero"
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
             ) : (
               <Fallback />

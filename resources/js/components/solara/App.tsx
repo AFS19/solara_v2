@@ -8,10 +8,10 @@ import { AboutBrand } from "./AboutBrand";
 import { FaqSection } from "./FaqSection";
 import { Newsletter } from "./Newsletter";
 
-export function App({ featuredProducts }: { featuredProducts?: any[] }) {
+export function App({ featuredProducts, heroUrl }: { featuredProducts?: any[]; heroUrl?: string | null }) {
   return (
     <main>
-      <HeroSection />
+      <HeroSection heroUrl={heroUrl} />
       <UspBar />
       <ProductsGrid products={featuredProducts} />
       <SpfGuide />

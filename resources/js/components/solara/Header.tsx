@@ -4,6 +4,7 @@ import { Menu, ShoppingBag, X } from "lucide-react";
 import { t } from "@/lib/i18n";
 import { home } from '@/routes';
 import products from '@/routes/products';
+import type { SiteSettings } from '@/types';
 
 const links = [
   { key: "nav.home", href: home.url() },
@@ -14,7 +15,7 @@ const links = [
 ];
 
 export function Header() {
-  const { cartCount } = usePage<{ cartCount: number }>().props;
+  const { cartCount, siteSettings } = usePage<{ cartCount: number; siteSettings: SiteSettings }>().props;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [lang, setLang] = useState<"FR" | "AR" | "EN">("FR");
@@ -43,7 +44,7 @@ export function Header() {
     >
       <div className="max-w-[1280px] mx-auto h-full px-6 flex items-center justify-between">
         <Link href={home.url()} className="font-display text-[24px] text-gold font-bold tracking-tight">
-          SOLARA
+          {siteSettings.general.site_name}
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">
@@ -104,7 +105,7 @@ export function Header() {
           <div className="absolute inset-0 bg-charcoal/40" onClick={() => setOpen(false)} />
           <div className="absolute top-0 right-0 h-full w-72 bg-white shadow-xl p-6 animate-fade-up">
             <div className="flex justify-between items-center mb-8">
-              <span className="font-display text-gold text-xl">SOLARA</span>
+              <span className="font-display text-gold text-xl">{siteSettings.general.site_name}</span>
               <button onClick={() => setOpen(false)}>
                 <X size={22} />
               </button>

@@ -1,18 +1,39 @@
 import { Instagram, Facebook, Music2 } from "lucide-react";
+import { usePage } from '@inertiajs/react';
 import { t } from "@/lib/i18n";
+import type { SiteSettings } from '@/types';
+
+const socialIcons: Record<string, typeof Instagram> = {
+  instagram: Instagram,
+  facebook: Facebook,
+  tiktok: Music2,
+};
 
 export function Footer() {
+  const { siteSettings } = usePage<{ siteSettings: SiteSettings }>().props;
+  const { general, contact, social } = siteSettings;
+
+  const socialEntries = Object.entries(social)
+    .filter(([, url]) => url)
+    .map(([platform, url]) => ({
+      platform,
+      url: url as string,
+      Icon: socialIcons[platform] || Instagram,
+    }));
+
   return (
     <footer className="bg-charcoal text-cream/90">
       <div className="max-w-[1280px] mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4 gap-10">
         <div className="col-span-2 md:col-span-1">
-          <div className="font-display text-2xl text-gold">SOLARA</div>
+          <div className="font-display text-2xl text-gold">{general.site_name}</div>
           <p className="mt-4 text-sm text-cream/70 max-w-xs">{t("footer.tagline")}</p>
           <div className="mt-5 flex gap-3">
-            {[Instagram, Facebook, Music2].map((Icon, i) => (
+            {socialEntries.map(({ platform, url, Icon }) => (
               <a
-                key={i}
-                href="#"
+                key={platform}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center hover:bg-gold hover:border-gold transition-colors"
               >
                 <Icon size={16} />
@@ -46,16 +67,16 @@ export function Footer() {
         <div>
           <h4 className="text-white text-sm font-medium mb-4">{t("footer.contact")}</h4>
           <ul className="space-y-2.5 text-sm text-cream/70">
-            <li>contact@solara.ma</li>
-            <li>+212 5XX-XXXXXX</li>
-            <li>Casablanca, Maroc</li>
+            <li>{contact.email}</li>
+            <li>{contact.phone || ''}</li>
+            <li>{contact.address}</li>
           </ul>
         </div>
       </div>
 
       <div className="border-t border-white/10">
         <div className="max-w-[1280px] mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-cream/60">
-          <span>© {new Date().getFullYear()} Solara · Made with ☀️ in Morocco</span>
+          <span>© {new Date().getFullYear()} {general.site_name} · Made with ☀️ in Morocco</span>
           <div className="flex gap-2">
             {["VISA", "MC", "PayPal"].map((p) => (
               <span key={p} className="px-2.5 py-1 rounded bg-white/5 border border-white/10">

@@ -3,6 +3,10 @@
 namespace App\Http\Middleware;
 
 use App\Services\CartService;
+use App\Settings\ContactSettings;
+use App\Settings\GeneralSettings;
+use App\Settings\HeroSettings;
+use App\Settings\SocialSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Inertia\Middleware;
@@ -57,6 +61,12 @@ class HandleInertiaRequests extends Middleware
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'currentTeam' => fn () => $user?->currentTeam ? $user->toUserTeam($user->currentTeam) : null,
             'teams' => fn () => $user?->toUserTeams(includeCurrent: true) ?? [],
+            'siteSettings' => [
+                'general' => app(GeneralSettings::class),
+                'hero' => app(HeroSettings::class),
+                'contact' => app(ContactSettings::class),
+                'social' => app(SocialSettings::class),
+            ],
         ];
     }
 }

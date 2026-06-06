@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Settings;
+
+use Spatie\LaravelSettings\Settings;
+
+class SocialSettings extends Settings
+{
+    public ?string $whatsapp;
+
+    public ?string $facebook;
+
+    public ?string $instagram;
+
+    public ?string $tiktok;
+
+    public static function group(): string
+    {
+        return 'social';
+    }
+}
