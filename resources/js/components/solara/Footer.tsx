@@ -50,7 +50,7 @@ export function Footer() {
             <li><a href="#products" className="hover:text-gold">Produits</a></li>
             <li><a href="#spf-guide" className="hover:text-gold">Guide SPF</a></li>
             <li><a href="#about" className="hover:text-gold">À propos</a></li>
-            <li><a href="#" className="hover:text-gold">Blog</a></li>
+            {/* <li><a href="#" className="hover:text-gold">Blog</a></li> */}
           </ul>
         </div>
 
@@ -58,8 +58,8 @@ export function Footer() {
           <h4 className="text-white text-sm font-medium mb-4">{t("footer.help")}</h4>
           <ul className="space-y-2.5 text-sm text-cream/70">
             <li><a href="#faq" className="hover:text-gold">FAQ</a></li>
-            <li><a href="#" className="hover:text-gold">Livraison</a></li>
-            <li><a href="#" className="hover:text-gold">Retours</a></li>
+            {/* <li><a href="#" className="hover:text-gold">Livraison</a></li>
+            <li><a href="#" className="hover:text-gold">Retours</a></li> */}
             <li><a href="#" className="hover:text-gold">Contact</a></li>
             <li><a href="#" className="hover:text-gold">Mentions légales</a></li>
           </ul>
