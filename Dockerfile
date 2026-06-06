@@ -29,13 +29,16 @@ WORKDIR /var/www/html
 
 # Copy dependency files first (layer caching)
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 COPY package.json package-lock.json* ./
 RUN npm install
 
 # Copy full app
 COPY . .
+
+# Run composer post-install scripts (needs artisan present)
+RUN composer run-script post-autoload-dump
 
 # Build frontend assets
 RUN npm run build
