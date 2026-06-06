@@ -16,7 +16,7 @@ export default function Legal({ page }: PageProps) {
         <div className="max-w-[800px] mx-auto px-6">
           <h1 className="text-3xl md:text-4xl text-charcoal mb-8">{page.title}</h1>
           <div
-            className="prose prose-charcoal max-w-none"
+            className="prose-content"
             dangerouslySetInnerHTML={{ __html: page.content }}
           />
         </div>

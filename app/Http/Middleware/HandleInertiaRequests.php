@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Page;
 use App\Services\CartService;
 use App\Settings\ContactSettings;
 use App\Settings\ContentSettings;
@@ -69,6 +70,7 @@ class HandleInertiaRequests extends Middleware
                 'social' => app(SocialSettings::class),
                 'content' => app(ContentSettings::class),
             ],
+            'legalPageExists' => fn () => Page::where('slug', 'mentions-legales')->where('is_active', true)->exists(),
         ];
     }
 }

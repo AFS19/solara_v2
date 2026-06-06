@@ -12,7 +12,7 @@ const socialIcons: Record<string, typeof Instagram> = {
 };
 
 export function Footer() {
-  const { siteSettings } = usePage<{ siteSettings: SiteSettings }>().props;
+  const { siteSettings, legalPageExists } = usePage<{ siteSettings: SiteSettings; legalPageExists: boolean }>().props;
   const { general, contact: contactSettings, social } = siteSettings;
 
   const socialEntries = Object.entries(social)
@@ -60,7 +60,9 @@ export function Footer() {
           <ul className="space-y-2.5 text-sm text-cream/70">
             <li><a href="#faq" className="hover:text-gold">FAQ</a></li>
             <li><Link href={contact.url()} className="hover:text-gold">Contact</Link></li>
-            <li><Link href="/mentions-legales" className="hover:text-gold">Mentions légales</Link></li>
+            {legalPageExists && (
+              <li><Link href="/mentions-legales" className="hover:text-gold">Mentions légales</Link></li>
+            )}
           </ul>
         </div>
 
@@ -81,13 +83,13 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="max-w-[1280px] mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-cream/60">
           <span>© {new Date().getFullYear()} {general.site_name} · Made with ☀️ in Morocco</span>
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             {["M.AFSSAS"].map((p) => (
               <span key={p} className="px-2.5 py-1 rounded bg-white/5 border border-white/10">
                 {p}
               </span>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>

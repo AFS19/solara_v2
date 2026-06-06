@@ -3,6 +3,8 @@
 
 @import 'tw-animate-css';
 
+@plugin '@tailwindcss/typography';
+
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
@@ -181,5 +183,23 @@
 
     body {
         @apply bg-background text-foreground;
+    }
+}
+
+@layer utilities {
+    .prose-content {
+        @apply prose prose-neutral max-w-none;
+        @apply prose-headings:text-charcoal prose-headings:font-display;
+        @apply prose-h1:text-3xl prose-h1:md:text-4xl;
+        @apply prose-h2:text-2xl prose-h2:md:text-3xl;
+        @apply prose-h3:text-xl prose-h3:md:text-2xl;
+        @apply prose-p:text-charcoal/90;
+        @apply prose-a:text-gold prose-a:no-underline hover:prose-a:underline;
+        @apply prose-strong:text-charcoal;
+        @apply prose-img:rounded-lg prose-img:shadow-md prose-img:mx-auto;
+        @apply prose-blockquote:border-l-gold prose-blockquote:bg-sand/30 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-lg;
+        @apply prose-ul:marker:text-gold;
+        @apply prose-ol:marker:text-gold;
+        @apply prose-hr:border-charcoal/20;
     }
 }
