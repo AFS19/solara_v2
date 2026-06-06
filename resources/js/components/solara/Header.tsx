@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, usePage } from '@inertiajs/react';
 import { Menu, ShoppingBag, X } from "lucide-react";
 import { t } from "@/lib/i18n";
-import { home } from '@/routes';
+import { contact, home } from '@/routes';
 import products from '@/routes/products';
 import type { SiteSettings } from '@/types';
 
@@ -11,7 +11,7 @@ const links = [
   { key: "nav.products", href: products.index.url() },
   { key: "nav.guide", href: home.url() + '#spf-guide' },
   { key: "nav.about", href: home.url() + '#about' },
-  { key: "nav.contact", href: home.url() + '#newsletter' },
+  { key: "nav.contact", href: contact.url() },
 ];
 
 export function Header() {

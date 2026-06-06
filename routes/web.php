@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Teams\TeamInvitationController;
@@ -25,6 +27,10 @@ Route::get('/commande/merci/{order}', [CheckoutController::class, 'success'])->n
 
 Route::post('/newsletter', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::post('/produits/{product:slug}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/mentions-legales', [PageController::class, 'legal'])->name('legal');
 
 Route::prefix('{current_team}')
     ->middleware(['auth', 'verified', EnsureTeamMembership::class])

@@ -21,6 +21,8 @@ createInertiaApp({
             case name === 'Cart/Index':
             case name === 'Checkout/Index':
             case name === 'Checkout/Success':
+            case name === 'Contact':
+            case name === 'Legal':
                 return PublicLayout;
             case name.startsWith('auth/'):
                 return AuthLayout;

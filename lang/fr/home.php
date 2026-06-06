@@ -91,4 +91,22 @@ return [
         'help' => 'Aide',
         'contact' => 'Contact',
     ],
+    'page' => [
+        'contact' => [
+            'title' => 'Contact',
+            'subtitle' => 'Une question ? Envoyez-nous un message.',
+        ],
+        'legal' => [
+            'title' => 'Mentions légales',
+        ],
+    ],
+    'contact' => [
+        'form' => [
+            'name' => 'Nom complet',
+            'email' => 'Email',
+            'message' => 'Message',
+            'submit' => 'Envoyer',
+        ],
+        'success' => 'Message envoyé avec succès !',
+    ],
 ];

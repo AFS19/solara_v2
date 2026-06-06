@@ -1,6 +1,7 @@
 import { Instagram, Facebook, Music2, MessageCircle } from "lucide-react";
-import { usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { t } from "@/lib/i18n";
+import { contact } from '@/routes';
 import type { SiteSettings } from '@/types';
 
 const socialIcons: Record<string, typeof Instagram> = {
@@ -12,7 +13,7 @@ const socialIcons: Record<string, typeof Instagram> = {
 
 export function Footer() {
   const { siteSettings } = usePage<{ siteSettings: SiteSettings }>().props;
-  const { general, contact, social } = siteSettings;
+  const { general, contact: contactSettings, social } = siteSettings;
 
   const socialEntries = Object.entries(social)
     .filter(([, value]) => value)
@@ -58,10 +59,8 @@ export function Footer() {
           <h4 className="text-white text-sm font-medium mb-4">{t("footer.help")}</h4>
           <ul className="space-y-2.5 text-sm text-cream/70">
             <li><a href="#faq" className="hover:text-gold">FAQ</a></li>
-            {/* <li><a href="#" className="hover:text-gold">Livraison</a></li>
-            <li><a href="#" className="hover:text-gold">Retours</a></li> */}
-            <li><a href="#" className="hover:text-gold">Contact</a></li>
-            <li><a href="#" className="hover:text-gold">Mentions légales</a></li>
+            <li><Link href={contact.url()} className="hover:text-gold">Contact</Link></li>
+            <li><Link href="/mentions-legales" className="hover:text-gold">Mentions légales</Link></li>
           </ul>
         </div>
 
@@ -69,12 +68,12 @@ export function Footer() {
           <h4 className="text-white text-sm font-medium mb-4">{t("footer.contact")}</h4>
           <ul className="space-y-2.5 text-sm text-cream/70">
             <li>
-              <a href={`mailto:${contact.email}`}> {contact.email} </a>
+              <a href={`mailto:${contactSettings.email}`}> {contactSettings.email} </a>
             </li>
             <li>
-              <a href={`tel:${contact.phone}`}> {contact.phone || ''} </a>
+              <a href={`tel:${contactSettings.phone}`}> {contactSettings.phone || ''} </a>
             </li>
-            <li> {contact.address} </li>
+            <li> {contactSettings.address} </li>
           </ul>
         </div>
       </div>
