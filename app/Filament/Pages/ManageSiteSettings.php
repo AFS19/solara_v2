@@ -106,7 +106,7 @@ class ManageSiteSettings extends Page
 
                             FileUpload::make('hero_media_path')
                                 ->label('Media')
-                                ->disk('public')
+                                ->disk('supabase')
                                 ->directory('hero')
                                 ->acceptedFileTypes([
                                     'image/jpeg',
