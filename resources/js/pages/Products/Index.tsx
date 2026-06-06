@@ -2,6 +2,7 @@ import { Head, Link, router, usePage } from '@inertiajs/react';
 import { toast } from 'sonner';
 import { t } from '@/lib/i18n';
 import { Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import type { SiteSettings } from '@/types';
 
 interface Category {
   id: number;
@@ -53,6 +54,8 @@ interface PageProps {
 
 export default function ProductsIndex() {
   const { products, categories, spfOptions, filters } = usePage<PageProps>().props;
+  const { siteSettings } = usePage<{ siteSettings: SiteSettings }>().props;
+  const currency = siteSettings.general.currency;
 
   const updateFilter = (key: string, value: string | number | boolean | null) => {
     const params = new URLSearchParams(window.location.search);
@@ -238,7 +241,7 @@ export default function ProductsIndex() {
                       <p className="mt-1 text-[13px] text-mutedtone line-clamp-2">{product.description || ''}</p>
 
                       <div className="mt-3 flex items-center justify-between">
-                        <span className="text-gold font-semibold text-[20px]">{product.price} MAD</span>
+                        <span className="text-gold font-semibold text-[20px]">{product.price} {currency}</span>
                         <div className="flex items-center gap-1 text-mutedtone text-xs">
                           <Star size={14} className="fill-gold text-gold" />
                           <span>4.5</span>

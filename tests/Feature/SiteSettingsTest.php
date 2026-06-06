@@ -4,6 +4,7 @@ use App\Filament\Pages\ManageSiteSettings;
 use App\Models\Product;
 use App\Models\User;
 use App\Settings\ContactSettings;
+use App\Settings\ContentSettings;
 use App\Settings\GeneralSettings;
 use App\Settings\HeroSettings;
 use App\Settings\SocialSettings;
@@ -11,9 +12,13 @@ use Livewire\Livewire;
 
 it('loads settings with defaults', function () {
     expect(app(GeneralSettings::class)->site_name)->toBe('Sunscreen Store');
+    expect(app(GeneralSettings::class)->currency)->toBe('MAD');
     expect(app(HeroSettings::class)->source)->toBe('product');
     expect(app(ContactSettings::class)->email)->toBe('contact@example.com');
     expect(app(SocialSettings::class)->facebook)->toBeNull();
+    expect(app(ContentSettings::class)->testimonials)->toBeArray();
+    expect(app(ContentSettings::class)->about_stats)->toBeString();
+    expect(app(ContentSettings::class)->about_badges)->toBeArray();
 });
 
 it('requires auth for settings page', function () {
@@ -32,10 +37,12 @@ it('saves general settings', function () {
 
     Livewire::actingAs($user)->test(ManageSiteSettings::class)
         ->set('data.general_site_name', 'New Store Name')
+        ->set('data.general_currency', 'USD')
         ->call('save')
         ->assertHasNoErrors();
 
     expect(app(GeneralSettings::class)->site_name)->toBe('New Store Name');
+    expect(app(GeneralSettings::class)->currency)->toBe('USD');
 });
 
 it('saves hero product settings', function () {
@@ -77,7 +84,7 @@ it('saves contact and social settings', function () {
         ->set('data.contact_phone', '+1234567890')
         ->set('data.contact_address', '123 Sun St')
         ->set('data.social_facebook', 'https://fb.com/test')
-        ->set('data.social_whatsapp', 'https://wa.me/test')
+        ->set('data.social_whatsapp', '+212600000000')
         ->call('save')
         ->assertHasNoErrors();
 
@@ -88,5 +95,23 @@ it('saves contact and social settings', function () {
 
     $social = app(SocialSettings::class);
     expect($social->facebook)->toBe('https://fb.com/test');
-    expect($social->whatsapp)->toBe('https://wa.me/test');
+    expect($social->whatsapp)->toBe('+212600000000');
+});
+
+it('saves content settings', function () {
+    $user = User::factory()->create();
+
+    Livewire::actingAs($user)->test(ManageSiteSettings::class)
+        ->set('data.content_about_stats', 'Test stats')
+        ->set('data.content_about_badges', ['Badge 1', 'Badge 2'])
+        ->set('data.content_testimonials', [
+            ['name' => 'Test', 'loc' => 'City', 'product' => 'SPF 30', 'rating' => 5, 'text' => 'Great!'],
+        ])
+        ->call('save')
+        ->assertHasNoErrors();
+
+    $content = app(ContentSettings::class);
+    expect($content->about_stats)->toBe('Test stats');
+    expect($content->about_badges)->toBe(['Badge 1', 'Badge 2']);
+    expect($content->testimonials)->toHaveCount(1);
 });

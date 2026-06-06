@@ -6,6 +6,7 @@ use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use App\Models\Order;
+use App\Settings\GeneralSettings;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -22,6 +23,8 @@ class OrdersTable
 {
     public static function configure(Table $table): Table
     {
+        $currency = app(GeneralSettings::class)->currency;
+
         return $table
             ->columns([
                 TextColumn::make('id')
@@ -56,7 +59,7 @@ class OrdersTable
                 TextColumn::make('total')
                     ->label('order.fields.total')
                     ->translateLabel()
-                    ->money('MAD')
+                    ->money($currency)
                     ->sortable(),
 
                 TextColumn::make('created_at')

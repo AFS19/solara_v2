@@ -1,6 +1,7 @@
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { t } from '@/lib/i18n';
 import { Trash2 } from 'lucide-react';
+import type { SiteSettings } from '@/types';
 
 interface CartProduct {
   id: number;
@@ -25,6 +26,8 @@ interface PageProps {
 
 export default function CartIndex() {
   const { items, subtotal, count } = usePage<PageProps>().props;
+  const { siteSettings } = usePage<{ siteSettings: SiteSettings }>().props;
+  const currency = siteSettings.general.currency;
 
   const updateQty = (product: CartProduct, quantity: number) => {
     router.patch(`/panier/${product.slug}`, { quantity }, { preserveState: true, preserveScroll: true });
@@ -70,7 +73,7 @@ export default function CartIndex() {
                     <div className="flex-1">
                       <h3 className="font-display text-charcoal">{item.product.name}</h3>
                       <p className="text-sm text-mutedtone mt-1">
-                        {Number(item.product.price).toFixed(2)} MAD
+                        {Number(item.product.price).toFixed(2)} {currency}
                       </p>
                       <div className="flex items-center gap-3 mt-3">
                         <input
@@ -90,7 +93,7 @@ export default function CartIndex() {
                       </div>
                     </div>
                     <div className="text-right self-center">
-                      <p className="font-semibold text-charcoal">{item.subtotal.toFixed(2)} MAD</p>
+                      <p className="font-semibold text-charcoal">{item.subtotal.toFixed(2)} {currency}</p>
                     </div>
                   </div>
                 ))}
@@ -100,11 +103,11 @@ export default function CartIndex() {
                 <h3 className="text-lg font-semibold text-charcoal mb-4">{t('cart.total')}</h3>
                 <div className="flex justify-between text-charcoal mb-2">
                   <span>{t('cart.subtotal')}</span>
-                  <span>{subtotal.toFixed(2)} MAD</span>
+                  <span>{subtotal.toFixed(2)} {currency}</span>
                 </div>
                 <div className="flex justify-between text-charcoal font-semibold text-lg mt-4 pt-4 border-t border-border">
                   <span>{t('cart.total')}</span>
-                  <span>{subtotal.toFixed(2)} MAD</span>
+                  <span>{subtotal.toFixed(2)} {currency}</span>
                 </div>
                 <Link
                   href="/commande"

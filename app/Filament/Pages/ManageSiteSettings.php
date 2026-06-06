@@ -4,12 +4,16 @@ namespace App\Filament\Pages;
 
 use App\Models\Product;
 use App\Settings\ContactSettings;
+use App\Settings\ContentSettings;
 use App\Settings\GeneralSettings;
 use App\Settings\HeroSettings;
 use App\Settings\SocialSettings;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -42,9 +46,11 @@ class ManageSiteSettings extends Page
         $hero = app(HeroSettings::class);
         $contact = app(ContactSettings::class);
         $social = app(SocialSettings::class);
+        $content = app(ContentSettings::class);
 
         $this->form->fill([
             'general_site_name' => $general->site_name,
+            'general_currency' => $general->currency,
             'hero_source' => $hero->source,
             'hero_product_id' => $hero->product_id,
             'hero_media_path' => $hero->media_path,
@@ -55,6 +61,9 @@ class ManageSiteSettings extends Page
             'social_facebook' => $social->facebook,
             'social_instagram' => $social->instagram,
             'social_tiktok' => $social->tiktok,
+            'content_testimonials' => $content->testimonials,
+            'content_about_stats' => $content->about_stats,
+            'content_about_badges' => $content->about_badges,
         ]);
     }
 
@@ -69,7 +78,14 @@ class ManageSiteSettings extends Page
                                 ->label('Site Name')
                                 ->required()
                                 ->maxLength(255),
-                        ]),
+
+                            TextInput::make('general_currency')
+                                ->label('Currency')
+                                ->required()
+                                ->maxLength(10)
+                                ->default('MAD'),
+                        ])
+                        ->columns(2),
 
                     Section::make('Hero')
                         ->schema([
@@ -121,8 +137,7 @@ class ManageSiteSettings extends Page
                     Section::make('Social Media')
                         ->schema([
                             TextInput::make('social_whatsapp')
-                                ->label('WhatsApp')
-                                ->url()
+                                ->label('WhatsApp Number')
                                 ->prefixIcon('heroicon-m-chat-bubble-left-right'),
 
                             TextInput::make('social_facebook')
@@ -141,6 +156,34 @@ class ManageSiteSettings extends Page
                                 ->prefixIcon('heroicon-m-video-camera'),
                         ])
                         ->columns(2),
+
+                    Section::make('Content')
+                        ->schema([
+                            Repeater::make('content_testimonials')
+                                ->label('Testimonials')
+                                ->schema([
+                                    TextInput::make('name')->required(),
+                                    TextInput::make('loc')->required()->label('Location'),
+                                    TextInput::make('product')->required(),
+                                    TextInput::make('rating')
+                                        ->required()
+                                        ->numeric()
+                                        ->minValue(1)
+                                        ->maxValue(5)
+                                        ->default(5),
+                                    Textarea::make('text')->required()->rows(2)->columnSpanFull(),
+                                ])
+                                ->columns(2)
+                                ->collapsible(),
+
+                            TextInput::make('content_about_stats')
+                                ->label('About Stats')
+                                ->required(),
+
+                            TagsInput::make('content_about_badges')
+                                ->label('About Badges')
+                                ->required(),
+                        ]),
                 ])
                     ->livewireSubmitHandler('save')
                     ->footer([
@@ -161,6 +204,7 @@ class ManageSiteSettings extends Page
 
         $general = app(GeneralSettings::class);
         $general->site_name = $data['general_site_name'];
+        $general->currency = $data['general_currency'];
         $general->save();
 
         $hero = app(HeroSettings::class);
@@ -181,6 +225,12 @@ class ManageSiteSettings extends Page
         $social->instagram = $data['social_instagram'] ?: null;
         $social->tiktok = $data['social_tiktok'] ?: null;
         $social->save();
+
+        $content = app(ContentSettings::class);
+        $content->testimonials = $data['content_testimonials'] ?: [];
+        $content->about_stats = $data['content_about_stats'];
+        $content->about_badges = $data['content_about_badges'] ?: [];
+        $content->save();
 
         Notification::make()
             ->success()

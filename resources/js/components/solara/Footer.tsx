@@ -1,4 +1,4 @@
-import { Instagram, Facebook, Music2 } from "lucide-react";
+import { Instagram, Facebook, Music2, MessageCircle } from "lucide-react";
 import { usePage } from '@inertiajs/react';
 import { t } from "@/lib/i18n";
 import type { SiteSettings } from '@/types';
@@ -7,6 +7,7 @@ const socialIcons: Record<string, typeof Instagram> = {
   instagram: Instagram,
   facebook: Facebook,
   tiktok: Music2,
+  whatsapp: MessageCircle,
 };
 
 export function Footer() {
@@ -14,10 +15,10 @@ export function Footer() {
   const { general, contact, social } = siteSettings;
 
   const socialEntries = Object.entries(social)
-    .filter(([, url]) => url)
-    .map(([platform, url]) => ({
+    .filter(([, value]) => value)
+    .map(([platform, value]) => ({
       platform,
-      url: url as string,
+      url: platform === 'whatsapp' ? `https://wa.me/${value}` : (value as string),
       Icon: socialIcons[platform] || Instagram,
     }));
 
@@ -67,9 +68,13 @@ export function Footer() {
         <div>
           <h4 className="text-white text-sm font-medium mb-4">{t("footer.contact")}</h4>
           <ul className="space-y-2.5 text-sm text-cream/70">
-            <li>{contact.email}</li>
-            <li>{contact.phone || ''}</li>
-            <li>{contact.address}</li>
+            <li>
+              <a href={`mailto:${contact.email}`}> {contact.email} </a>
+            </li>
+            <li>
+              <a href={`tel:${contact.phone}`}> {contact.phone || ''} </a>
+            </li>
+            <li> {contact.address} </li>
           </ul>
         </div>
       </div>
@@ -78,7 +83,7 @@ export function Footer() {
         <div className="max-w-[1280px] mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-cream/60">
           <span>© {new Date().getFullYear()} {general.site_name} · Made with ☀️ in Morocco</span>
           <div className="flex gap-2">
-            {["VISA", "MC", "PayPal"].map((p) => (
+            {["M.AFSSAS"].map((p) => (
               <span key={p} className="px-2.5 py-1 rounded bg-white/5 border border-white/10">
                 {p}
               </span>

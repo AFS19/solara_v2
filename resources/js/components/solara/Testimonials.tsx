@@ -1,20 +1,16 @@
 import { Star } from "lucide-react";
+import { usePage } from '@inertiajs/react';
 import { t } from "@/lib/i18n";
-
-const data = [
-  { name: "Sophie M.", loc: "Paris", product: "SPF 50+ Visage", rating: 5, text: "Ma peau n'a jamais été aussi bien protégée. Texture légère et non grasse, je recommande !" },
-  { name: "Karim B.", loc: "Casablanca", product: "SPF 30 Corps", rating: 5, text: "Parfait pour le sport. Tient très bien à la transpiration et ne pique pas les yeux." },
-  { name: "Léa T.", loc: "Lyon", product: "SPF 50+ Enfants", rating: 5, text: "Mes enfants adorent l'odeur ! Et moi j'adore qu'elle soit 100% naturelle." },
-  { name: "Yasmine A.", loc: "Marrakech", product: "SPF 50 Stick", rating: 4, text: "Très pratique en voyage. Le stick est compact et efficace." },
-  { name: "Marc D.", loc: "Bordeaux", product: "SPF 30 Corps", rating: 5, text: "Utilisé tout l'été en surf, résistant à l'eau, impeccable." },
-  { name: "Nadia R.", loc: "Toulouse", product: "SPF 50+ Visage", rating: 5, text: "Fini les taches de vieillesse. Je l'utilise toute l'année maintenant." },
-];
+import type { SiteSettings } from '@/types';
 
 function initials(name: string) {
   return name.split(" ").map((p) => p[0]).join("").toUpperCase();
 }
 
 export function Testimonials() {
+  const { siteSettings } = usePage<{ siteSettings: SiteSettings }>().props;
+  const data = siteSettings.content.testimonials;
+
   return (
     <section id="testimonials" className="py-24 bg-cream">
       <div className="max-w-[1280px] mx-auto px-6">

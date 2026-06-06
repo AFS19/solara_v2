@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { Heart, Star } from "lucide-react";
 import { t } from "@/lib/i18n";
+import type { SiteSettings } from '@/types';
 
 interface ProductFromDb {
   id: number;
@@ -31,6 +32,8 @@ function spfMatches(active: string, spf: number | null): boolean {
 
 export function ProductsGrid({ products: dbProducts }: { products?: ProductFromDb[] }) {
   const [active, setActive] = useState("Tous");
+  const { siteSettings } = usePage<{ siteSettings: SiteSettings }>().props;
+  const currency = siteSettings.general.currency;
 
   const visible = dbProducts?.filter((p) => spfMatches(active, p.spf)) ?? [];
 
@@ -106,7 +109,7 @@ export function ProductsGrid({ products: dbProducts }: { products?: ProductFromD
                   <p className="mt-1 text-[13px] text-mutedtone line-clamp-2">{p.description || ""}</p>
 
                   <div className="mt-3 flex items-center justify-between">
-                    <span className="text-gold font-semibold text-[20px]">{p.price} MAD</span>
+                    <span className="text-gold font-semibold text-[20px]">{p.price} {currency}</span>
                     <div className="flex items-center gap-1 text-mutedtone text-xs">
                       <Star size={14} className="fill-gold text-gold" />
                       <span>4.5</span>

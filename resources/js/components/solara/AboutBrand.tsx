@@ -1,6 +1,11 @@
+import { usePage } from '@inertiajs/react';
 import { t } from "@/lib/i18n";
+import type { SiteSettings } from '@/types';
 
 export function AboutBrand() {
+  const { siteSettings } = usePage<{ siteSettings: SiteSettings }>().props;
+  const { about_stats, about_badges } = siteSettings.content;
+
   return (
     <section id="about" className="py-24 bg-white">
       <div className="max-w-[1280px] mx-auto px-6 grid lg:grid-cols-2 gap-14 items-center">
@@ -12,7 +17,7 @@ export function AboutBrand() {
           />
           <div className="absolute -bottom-6 -right-2 md:right-6 bg-white rounded-2xl p-5 shadow-xl max-w-[260px]">
             <p className="text-sm text-charcoal">
-              <span className="text-gold font-medium">Fondée en 2019</span> · 50 000+ clients · 100% naturel
+              <span className="text-gold font-medium">{about_stats}</span>
             </p>
           </div>
         </div>
@@ -26,7 +31,7 @@ export function AboutBrand() {
           <p className="mt-4 text-mutedtone leading-relaxed">{t("about.p2")}</p>
 
           <div className="mt-6 flex flex-wrap gap-2">
-            {["🌿 Vegan", "🧪 Sans parabènes", "♻️ Éco-responsable"].map((v) => (
+            {about_badges.map((v: string) => (
               <span key={v} className="text-sm bg-cream border border-border text-charcoal px-4 py-1.5 rounded-full">
                 {v}
               </span>

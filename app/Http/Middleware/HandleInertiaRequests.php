@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Services\CartService;
 use App\Settings\ContactSettings;
+use App\Settings\ContentSettings;
 use App\Settings\GeneralSettings;
 use App\Settings\HeroSettings;
 use App\Settings\SocialSettings;
@@ -66,6 +67,7 @@ class HandleInertiaRequests extends Middleware
                 'hero' => app(HeroSettings::class),
                 'contact' => app(ContactSettings::class),
                 'social' => app(SocialSettings::class),
+                'content' => app(ContentSettings::class),
             ],
         ];
     }

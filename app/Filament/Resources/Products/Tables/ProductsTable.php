@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
+use App\Settings\GeneralSettings;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -15,6 +16,8 @@ class ProductsTable
 {
     public static function configure(Table $table): Table
     {
+        $currency = app(GeneralSettings::class)->currency;
+
         return $table
             ->columns([
                 TextColumn::make('name')
@@ -31,7 +34,7 @@ class ProductsTable
                 TextColumn::make('price')
                     ->label('product.fields.price')
                     ->translateLabel()
-                    ->money('MAD')
+                    ->money($currency)
                     ->sortable(),
 
                 TextColumn::make('spf')

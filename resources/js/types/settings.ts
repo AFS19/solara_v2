@@ -1,5 +1,6 @@
 export interface GeneralSettings {
   site_name: string;
+  currency: string;
 }
 
 export interface HeroSettings {
@@ -21,9 +22,16 @@ export interface SocialSettings {
   tiktok: string | null;
 }
 
+export interface ContentSettings {
+  testimonials: { name: string; loc: string; product: string; rating: number; text: string }[];
+  about_stats: string;
+  about_badges: string[];
+}
+
 export interface SiteSettings {
   general: GeneralSettings;
   hero: HeroSettings;
   contact: ContactSettings;
   social: SocialSettings;
+  content: ContentSettings;
 }

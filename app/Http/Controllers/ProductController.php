@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Settings\GeneralSettings;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -71,9 +72,11 @@ class ProductController extends Controller
             ->latest()
             ->get();
 
+        $currency = app(GeneralSettings::class)->currency;
+
         return Inertia::render('Products/Show', [
             'product' => $product,
-            'priceFormatted' => number_format($product->price, 2, ',', ' ').' MAD',
+            'priceFormatted' => number_format($product->price, 2, ',', ' ').' '.$currency,
             'model3dUrl' => $product->has_3d_model ? $product->getFirstMediaUrl('model_3d') : null,
             'firstImageUrl' => $product->getFirstMediaUrl('images'),
             'reviews' => $approvedReviews,

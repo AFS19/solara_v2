@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Categories\RelationManagers;
 
+use App\Settings\GeneralSettings;
 use Filament\Actions\CreateAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Textarea;
@@ -83,6 +84,8 @@ class ProductsRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
+        $currency = app(GeneralSettings::class)->currency;
+
         return $table
             ->columns([
                 TextColumn::make('name')
@@ -94,7 +97,7 @@ class ProductsRelationManager extends RelationManager
                 TextColumn::make('price')
                     ->label('product.fields.price')
                     ->translateLabel()
-                    ->money('MAD')
+                    ->money($currency)
                     ->sortable(),
             ])
             ->recordActions([

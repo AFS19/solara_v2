@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Orders\RelationManagers;
 
+use App\Settings\GeneralSettings;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
@@ -19,6 +20,8 @@ class OrderItemsRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
+        $currency = app(GeneralSettings::class)->currency;
+
         return $table
             ->columns([
                 TextColumn::make('name')
@@ -29,7 +32,7 @@ class OrderItemsRelationManager extends RelationManager
                 TextColumn::make('price')
                     ->label('product.fields.price')
                     ->translateLabel()
-                    ->money('MAD')
+                    ->money($currency)
                     ->sortable(),
 
                 TextColumn::make('quantity')
@@ -40,7 +43,7 @@ class OrderItemsRelationManager extends RelationManager
                 TextColumn::make('subtotal')
                     ->label('order.fields.subtotal')
                     ->translateLabel()
-                    ->money('MAD')
+                    ->money($currency)
                     ->sortable(),
             ])
             ->recordActions([])

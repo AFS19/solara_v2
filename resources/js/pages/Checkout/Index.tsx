@@ -1,5 +1,6 @@
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { t } from '@/lib/i18n';
+import type { SiteSettings } from '@/types';
 
 interface CartProduct {
   id: number;
@@ -23,6 +24,8 @@ interface PageProps {
 
 export default function CheckoutIndex() {
   const { items, subtotal } = usePage<PageProps>().props;
+  const { siteSettings } = usePage<{ siteSettings: SiteSettings }>().props;
+  const currency = siteSettings.general.currency;
 
   const { data, setData, post, processing, errors } = useForm({
     email: '',
@@ -151,13 +154,13 @@ export default function CheckoutIndex() {
                     <span>
                       {item.product.name} x{item.quantity}
                     </span>
-                    <span>{item.subtotal.toFixed(2)} MAD</span>
+                    <span>{item.subtotal.toFixed(2)} {currency}</span>
                   </div>
                 ))}
               </div>
               <div className="flex justify-between text-charcoal font-semibold text-lg mt-4 pt-4 border-t border-border">
                 <span>{t('cart.total')}</span>
-                <span>{subtotal.toFixed(2)} MAD</span>
+                <span>{subtotal.toFixed(2)} {currency}</span>
               </div>
             </aside>
           </div>
