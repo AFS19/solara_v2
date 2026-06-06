@@ -12,9 +12,10 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libsqlite3-dev \
+    libicu-dev \
     default-mysql-client \
     zip \
-    && docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring xml zip
+    && docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring xml zip intl exif
 
 # Install Node.js 20
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
