@@ -59,7 +59,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <div className="hidden md:flex items-center bg-cream/80 rounded-full p-1 border border-border">
+          {/* <div className="hidden md:flex items-center bg-cream/80 rounded-full p-1 border border-border">
             {(["FR", "AR", "EN"] as const).map((l) => (
               <button
                 key={l}
@@ -71,7 +71,7 @@ export function Header() {
                 {l}
               </button>
             ))}
-          </div>
+          </div> */}
 
           <Link href="/panier" className="relative p-2 text-charcoal hover:text-coral transition-colors">
             <ShoppingBag size={20} />
